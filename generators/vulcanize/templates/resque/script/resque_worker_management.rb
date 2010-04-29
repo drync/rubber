@@ -7,7 +7,7 @@ def start_all(workers)
 end
 
 def start(worker, index)
-  cmd = "cd #{Rails.root}; RAILS_ENV=#{Rails.env} INTERVAL=1 QUEUES=#{worker.queues} nohup rake resque:work &> log/resque_worker_default_#{index}.log & echo $! > tmp/pids/resque_worker_default_#{index}.pid"
+  cmd = "cd #{Rails.root}; RAILS_ENV=#{Rails.env} INTERVAL=1 QUEUES=#{worker.queues} nohup rake resque:work &> log/resque_worker_#{index}.log & echo $! > tmp/pids/resque_worker_#{index}.pid"
   `#{cmd}`
 end
 
@@ -20,7 +20,7 @@ def stop_all(workers)
 end
 
 def stop(index)
-  cmd = "cd #{Rails.root} && kill `cat tmp/pids/resque_worker_default_#{index}.pid` && rm -f tmp/pids/resque_worker_default_#{index}.pid; exit 0;"
+  cmd = "cd #{Rails.root} && kill `cat tmp/pids/resque_worker_#{index}.pid` && rm -f tmp/pids/resque_worker_#{index}.pid; exit 0;"
   `#{cmd}`
 end
 
