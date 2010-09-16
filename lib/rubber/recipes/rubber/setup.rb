@@ -42,6 +42,22 @@ namespace :rubber do
 
   end
 
+  # Forces a direct connection
+  def direct_connection(ip)
+    task_name = "_direct_connection_#{ip}_#{rand(1000)}"
+    task task_name, :hosts => ip do
+      yield
+    end
+
+    begin
+      send task_name
+    rescue ConnectionError => e
+      sleep 2
+      logger.info "Failed to connect to #{ip}, retrying"
+      retry
+    end
+  end
+
   desc <<-DESC
     Sets up aliases for instance hostnames based on contents of instance.yml.
     Generates /etc/hosts for local/remote machines and sets hostname on
@@ -253,7 +269,19 @@ namespace :rubber do
   DESC
   after "deploy:update_code", "rubber:install_bundler_gems" if Rubber::Util.is_bundler?
   task :install_bundler_gems do
-    rsudo "cd #{current_release} && RAILS_ENV=#{RUBBER_ENV} bundle install --without development test"
+    # copied from bundler/capistrano in bundler distro
+    bundle_dir     = fetch(:bundle_dir,         " #{fetch(:shared_path)}/bundle")
+    bundle_without = [*fetch(:bundle_without,   [:development, :test])].compact
+    bundle_flags   = fetch(:bundle_flags, "--deployment --quiet")
+    bundle_gemfile = fetch(:bundle_gemfile,     "Gemfile")
+    bundle_cmd     = fetch(:bundle_cmd, "bundle")
+  
+    args = ["--gemfile #{fetch(:latest_release)}/#{bundle_gemfile}"]
+    args << "--path #{bundle_dir}" unless bundle_dir.to_s.empty?
+    args << bundle_flags.to_s
+    args << "--without #{bundle_without.join(" ")}" unless bundle_without.empty?
+
+    rsudo "#{bundle_cmd} install #{args.join(' ')}"
   end
 
   desc <<-DESC
@@ -397,9 +425,9 @@ namespace :rubber do
 
     rsudo "apt-get -q update"
     if upgrade
-      rsudo "export DEBIAN_FRONTEND=noninteractive; apt-get -q -y --force-yes dist-upgrade"
+      rsudo "export DEBIAN_FRONTEND=noninteractive; apt-get -q -o Dpkg::Options::=--force-confold -y --force-yes dist-upgrade"
     else
-      rsudo "export DEBIAN_FRONTEND=noninteractive; apt-get -q -y --force-yes install $CAPISTRANO:VAR$", opts
+      rsudo "export DEBIAN_FRONTEND=noninteractive; apt-get -q -o Dpkg::Options::=--force-confold -y --force-yes install $CAPISTRANO:VAR$", opts
     end
   end
 

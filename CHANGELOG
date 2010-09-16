@@ -1,3 +1,65 @@
+1.6.1
+-----
+
+Fixed issue with Rakefile generation for Rails 2.x. <f239f0e> [Kevin Menard]
+Fixed RVM installation. <79dcf17> [Kevin Menard]
+Bump the version of RVM. <324e939> [Kevin Menard]
+
+1.6.0
+-----
+
+Merge branch 'master' of github.com:wr0ngway/rubber <51a016c> [Matt Conway]
+stop loading rails within rubber as bundler in rails3 breaks everything by setting ENV[GEM_PATH], you may need to update your templates to use RUBBER_ENV/ROOT instead of RAILS_ENV/ROOT <8f4a0db> [Matt Conway]
+fix changelog gen <c5a8d83> [Matt Conway]
+Fix the API name for 32-bit medium CPU instance. <ec415ce> [Kevin Menard]
+
+1.5.11
+-----
+
+Handle timeout better for initial connect <fd582da> [Matt Conway]
+
+1.5.10
+-----
+
+fix passenger references to gem home to always point to global (rvm) one <51f1f8a> [Matt Conway]
+
+1.5.9
+-----
+
+fix find to handle filenames with spaces, prune bundle from permissions change <56b72ae> [Matt Conway]
+
+1.5.8
+-----
+
+use canonical bundler deploy <299a405> [Matt Conway]
+new amis, update to rails 3 final <d59b889> [Matt Conway]
+update to rvm 1.0.1 <b8e57df> [Matt Conway]
+try alternate timeout for instance connection hang issue <e72a881> [Matt Conway]
+quote env vars to keep crontab happy <1240818> [Matt Conway]
+
+1.5.7
+-----
+
+allow access to calling generator so can determine stuff like fake_root <fa6354c> [Matt Conway]
+refactor create using refresh <12df4c4> [Matt Conway]
+save config in refresh <cdb8344> [Matt Conway]
+
+1.5.6
+-----
+
+Merge branch 'master' of github.com:wr0ngway/rubber <9d6ca8a> [Matt Conway]
+force unattended apt-get for some rare cases <94fa160> [Matt Conway]
+fixed typo <2382e8d> [Matt Conway]
+mongrel custom_install should be rvm agnostic <b620f71> [Matt Conway]
+setup_gem_sources should precede install_gems on rvm <52f9d48> [Matt Conway]
+Restore DynDNS update support <80f3c0e> [Matt Conway]
+update munin conf for new ubuntu package <672db55> [Matt Conway]
+exclude unneeded/large files during noscm deploy <286c8da> [Matt Conway]
+Merge branch 'master' of github.com:wr0ngway/rubber <3da29cb> [Matt Conway]
+use specific rvm version to stop rubber breaking everytime they change stuff <71cba60> [Matt Conway]
+Don't try to set up SSH access on Windows hosts. <e1df646> [Kevin Menard]
+increase ulimit for cassandra <e45bae1> [Matt Conway]
+
 1.5.5
 -----
 

@@ -12,7 +12,7 @@
 packages: [build-essential, git-core, subversion, curl, autoconf, bison, ruby, zlib1g-dev, libssl-dev, libreadline5-dev, libxml2-dev]
 
 # REQUIRED: the version of rvm itself
-rvm_version: 0.1.38
+rvm_version: 1.0.5
 
 # REQUIRED: Set to the rvm version string for the ruby version you wish to use
 # Run "rvm list known" to see the list of possible options
@@ -26,3 +26,8 @@ rvm_prefix: /usr/local/rvm
   
 # lets us setup global envoronment to use rvm (also needed when running sudo)
 rvm_prepare: "source #{rvm_prefix}/scripts/rvm"
+
+# dirty hack to get the rvm gem home rather than bundler gem home
+# When we run rubber:config it loads rails/bundler, which forces the bundler gem home, yet deployment only gems
+# like passenger need to be installed in rvm gem home rather than bundler
+rvm_gem_home: "#{$rubber_rvm_gem_home ||= `unset GEM_HOME; bash -l -c 'rvm gemdir'`.strip}"
