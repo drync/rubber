@@ -31,7 +31,7 @@ module Rubber
             r = dns.getresource(hostname, Resolv::DNS::Resource::IN::A)
             result = [{:host =>opts[:host], :data => r.address}]
           end
-        rescue
+        rescue Exception => e
           puts "Rescue #{e} #{e.message}"
           raise "Domain needs to exist in dyndns as an A record before record can be updated"
         end

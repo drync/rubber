@@ -32,7 +32,7 @@ namespace :rubber do
           logger.info "Can't connect as user #{initial_ssh_user} to #{ip}, assuming root allowed"
         else
           sleep 2
-          logger.info "Failed to connect to #{ip}, retrying"
+          logger.info "Failed to connect to #{ip} (#{e}), retrying"
           retry
         end
       end
@@ -53,7 +53,7 @@ namespace :rubber do
       send task_name
     rescue ConnectionError => e
       sleep 2
-      logger.info "Failed to connect to #{ip}, retrying"
+      logger.info "Failed to connect to #{ip} (#{e}), retrying"
       retry
     end
   end
